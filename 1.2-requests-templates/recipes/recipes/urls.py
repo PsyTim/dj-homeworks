@@ -14,8 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import path, re_path
+from calculator.views import DATA, recipe
+
+
+# "^(one|two|three)$"
+reg = f"^({'|'.join(DATA.keys())})/$"
 
 urlpatterns = [
     # здесь зарегистрируйте вашу view-функцию
+    re_path(reg, recipe)
 ]
+
+# for k in DATA.keys():
+#     urlpatterns.append(path(f"{k}/", recipe))
