@@ -5,6 +5,7 @@
 # получение объявлений
 GET {{baseUrl}}/advertisements/
 Content-Type: application/json
+# Authorization: Token ba70dd5504eae50617362cb1d5039b0ebf54b28d
 
 ###
 
