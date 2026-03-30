@@ -1,4 +1,6 @@
+from pprint import pprint
 from django.contrib.auth.models import User
+from django.forms import ValidationError
 from rest_framework import serializers
 
 from advertisements.models import Advertisement
@@ -9,8 +11,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name',
-                  'last_name',)
+        fields = (
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+        )
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
@@ -22,8 +28,14 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Advertisement
-        fields = ('id', 'title', 'description', 'creator',
-                  'status', 'created_at', )
+        fields = (
+            "id",
+            "title",
+            "description",
+            "creator",
+            "status",
+            "created_at",
+        )
 
     def create(self, validated_data):
         """Метод для создания"""
@@ -41,5 +53,16 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         """Метод для валидации. Вызывается при создании и обновлении."""
 
         # TODO: добавьте требуемую валидацию
+        pprint(self.context["request"].method)
+        if (
+            self.context["request"].method == "CREATE"
+            or (
+                self.context["request"].method == "PATCH"
+                and data.get("status") == "OPEN"
+            )
+        ) and Advertisement.objects.filter(
+            creator=self.context["request"].user, status="OPEN"
+        ).count() >= 10:
+            raise ValidationError("Слишком много открытых объявлений")
 
         return data
