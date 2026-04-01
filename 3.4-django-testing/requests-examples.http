@@ -1,0 +1,28 @@
+# примеры API-запросов
+
+@baseUrl = http://localhost:8000/api/v1
+
+# получение объявлений
+GET {{baseUrl}}/courses/
+Content-Type: application/json
+
+
+###
+
+
+POST {{baseUrl}}/courses/
+Content-Type: application/json
+
+{
+  "name": "test course name"
+}
+
+###
+
+PATCH {{baseUrl}}/courses/1/
+Content-Type: application/json
+
+{
+  "name": "updated name"
+}
+###
